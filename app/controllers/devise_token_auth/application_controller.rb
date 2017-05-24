@@ -27,7 +27,7 @@ module DeviseTokenAuth
       if m
         mapping = Devise.mappings[m]
       else
-        mapping = Devise.mappings[resource_name] || Devise.mappings.values.first
+        mapping = Devise.mappings[resource_name.to_sym] || Devise.mappings.values.first
       end
 
       mapping.to
