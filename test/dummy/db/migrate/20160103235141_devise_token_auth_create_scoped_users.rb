@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 include MigrationDatabaseHelper
 
-class DeviseTokenAuthCreateScopedUsers < ActiveRecord::Migration
+class DeviseTokenAuthCreateScopedUsers < ActiveRecord::Migration[4.2]
   def change
     create_table(:scoped_users) do |t|
       ## Required
@@ -13,6 +15,7 @@ class DeviseTokenAuthCreateScopedUsers < ActiveRecord::Migration
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
+      t.boolean  :allow_password_change, :default => false
 
       ## Rememberable
       t.datetime :remember_created_at

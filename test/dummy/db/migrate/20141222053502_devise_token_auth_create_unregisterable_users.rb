@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 include MigrationDatabaseHelper
 
-class DeviseTokenAuthCreateUnregisterableUsers < ActiveRecord::Migration
+class DeviseTokenAuthCreateUnregisterableUsers < ActiveRecord::Migration[4.2]
   def change
     create_table(:unregisterable_users) do |t|
       ## Required
@@ -13,6 +15,7 @@ class DeviseTokenAuthCreateUnregisterableUsers < ActiveRecord::Migration
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
+      t.boolean  :allow_password_change, :default => false
 
       ## Rememberable
       t.datetime :remember_created_at

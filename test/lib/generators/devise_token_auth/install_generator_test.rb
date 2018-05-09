@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'fileutils'
 require 'generators/devise_token_auth/install_generator'
@@ -29,7 +31,11 @@ module DeviseTokenAuth
       end
 
       test 'migration file contains rails version' do
-        assert_migration 'db/migrate/devise_token_auth_create_users.rb', /#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}/
+        if Rails::VERSION::MAJOR >= 5
+          assert_migration 'db/migrate/devise_token_auth_create_users.rb', /#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}/
+        else
+          assert_migration 'db/migrate/devise_token_auth_create_users.rb'
+        end
       end
 
       test 'subsequent runs raise no errors' do

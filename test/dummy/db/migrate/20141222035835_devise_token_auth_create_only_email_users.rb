@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 include MigrationDatabaseHelper
 
-class DeviseTokenAuthCreateOnlyEmailUsers < ActiveRecord::Migration
+class DeviseTokenAuthCreateOnlyEmailUsers < ActiveRecord::Migration[4.2]
   def change
     create_table(:only_email_users) do |t|
       ## Required

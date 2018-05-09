@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Custom::RegistrationsController < DeviseTokenAuth::RegistrationsController
 
   def create
@@ -35,5 +37,4 @@ class Custom::RegistrationsController < DeviseTokenAuth::RegistrationsController
   def render_create_success
     render json: {custom: "foo"}
   end
-
 end
