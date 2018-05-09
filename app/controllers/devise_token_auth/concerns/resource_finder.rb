@@ -31,9 +31,9 @@ module DeviseTokenAuth::Concerns::ResourceFinder
 
   def resource_class(m=nil)
     if m
-      mapping = Devise.mappings[m]
+      mapping = Devise.mappings[m.to_sym]
     else
-      mapping = Devise.mappings[resource_name] || Devise.mappings.values.first
+      mapping = Devise.mappings[resource_name.to_sym] || Devise.mappings.values.first
     end
 
     mapping.to
