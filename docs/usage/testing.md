@@ -27,7 +27,7 @@ include ActionController::RespondWith
 describe 'Whether access is ocurring properly', type: :request do
   before(:each) do
     @current_user = FactoryBot.create(:user)
-    @client = FactoryBot.create :client
+    @client = FactoryBot.create(:client)
   end
 
   context 'context: general authentication via API, ' do
@@ -65,9 +65,9 @@ describe 'Whether access is ocurring properly', type: :request do
       login
       auth_params = get_auth_params_from_login_response_headers(response).tap do |h|
         h.each do |k, _v|
-                                                                      if k == 'access-token'
-                                                                        h[k] = '123'
-                                                                      end end
+          if k == 'access-token'
+            h[k] = '123'
+          end end
       end
       new_client = FactoryBot.create(:client)
       get api_find_client_by_name_path(new_client.name), headers: auth_params
@@ -125,7 +125,7 @@ end
 
 ```
 
-### (b) How to create an authorisation header from Scratch
+### (b) How to create an authorization header from Scratch
 
 ```ruby
 require 'rails_helper'
@@ -134,14 +134,14 @@ include ActionController::RespondWith
 def create_auth_header_from_scratch
   # You need to set up factory bot to use this method
   @current_user = FactoryBot.create(:user)
-  # create client id and token
-  client_id = SecureRandom.urlsafe_base64(nil, false)
-  token     = SecureRandom.urlsafe_base64(nil, false)
+
+  # create token
+  token = DeviseTokenAuth::TokenFactory.create
 
   # store client + token in user's token hash
-  @current_user.tokens[client_id] = {
-    token: BCrypt::Password.create(token),
-    expiry: (Time.now + 1.day).to_i
+  @current_user.tokens[token.client] = {
+    token:  token.token_hash,
+    expiry: token.expiry
   }
 
   # Now we have to pretend like an API user has already logged in.
@@ -152,7 +152,7 @@ def create_auth_header_from_scratch
   # The following assumes that the user has received those headers
   # and that they are then using those headers to make a request
 
-  new_auth_header = @current_user.build_auth_header(token, client_id)
+  new_auth_header = @current_user.build_auth_header(token.token, token.client)
 
   puts 'This is the new auth header'
   puts new_auth_header.to_s
